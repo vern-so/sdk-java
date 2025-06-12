@@ -59,6 +59,7 @@ class RunServiceImpl internal constructor(private val clientOptions: ClientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("runs")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -90,6 +91,7 @@ class RunServiceImpl internal constructor(private val clientOptions: ClientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("runs", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)

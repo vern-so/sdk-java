@@ -61,6 +61,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("runs")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -95,6 +96,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("runs", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)

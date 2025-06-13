@@ -20,6 +20,7 @@ import com.vern_sdk.api.models.runs.RunCreateParams
 import com.vern_sdk.api.models.runs.RunCreateResponse
 import com.vern_sdk.api.models.runs.RunRetrieveParams
 import com.vern_sdk.api.models.runs.RunRetrieveResponse
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class RunServiceImpl internal constructor(private val clientOptions: ClientOptions) : RunService {
@@ -29,6 +30,9 @@ class RunServiceImpl internal constructor(private val clientOptions: ClientOptio
     }
 
     override fun withRawResponse(): RunService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RunService =
+        RunServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: RunCreateParams,
@@ -48,6 +52,13 @@ class RunServiceImpl internal constructor(private val clientOptions: ClientOptio
         RunService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): RunService.WithRawResponse =
+            RunServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<RunCreateResponse> =
             jsonHandler<RunCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

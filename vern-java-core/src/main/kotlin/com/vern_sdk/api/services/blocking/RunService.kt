@@ -3,12 +3,14 @@
 package com.vern_sdk.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import com.vern_sdk.api.core.ClientOptions
 import com.vern_sdk.api.core.RequestOptions
 import com.vern_sdk.api.core.http.HttpResponseFor
 import com.vern_sdk.api.models.runs.RunCreateParams
 import com.vern_sdk.api.models.runs.RunCreateResponse
 import com.vern_sdk.api.models.runs.RunRetrieveParams
 import com.vern_sdk.api.models.runs.RunRetrieveResponse
+import java.util.function.Consumer
 
 interface RunService {
 
@@ -16,6 +18,13 @@ interface RunService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): RunService
 
     /** Executes a task with the provided inputs */
     fun create(params: RunCreateParams): RunCreateResponse = create(params, RequestOptions.none())
@@ -58,6 +67,13 @@ interface RunService {
 
     /** A view of [RunService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): RunService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /runs`, but is otherwise the same as

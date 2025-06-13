@@ -6,6 +6,7 @@ import com.vern_sdk.api.core.ClientOptions
 import com.vern_sdk.api.core.getPackageVersion
 import com.vern_sdk.api.services.async.RunServiceAsync
 import com.vern_sdk.api.services.async.RunServiceAsyncImpl
+import java.util.function.Consumer
 
 class VernClientAsyncImpl(private val clientOptions: ClientOptions) : VernClientAsync {
 
@@ -30,6 +31,9 @@ class VernClientAsyncImpl(private val clientOptions: ClientOptions) : VernClient
 
     override fun withRawResponse(): VernClientAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): VernClientAsync =
+        VernClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun runs(): RunServiceAsync = runs
 
     override fun close() = clientOptions.httpClient.close()
@@ -40,6 +44,13 @@ class VernClientAsyncImpl(private val clientOptions: ClientOptions) : VernClient
         private val runs: RunServiceAsync.WithRawResponse by lazy {
             RunServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): VernClientAsync.WithRawResponse =
+            VernClientAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun runs(): RunServiceAsync.WithRawResponse = runs
     }

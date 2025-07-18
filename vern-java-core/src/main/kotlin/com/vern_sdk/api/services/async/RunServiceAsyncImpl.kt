@@ -3,14 +3,14 @@
 package com.vern_sdk.api.services.async
 
 import com.vern_sdk.api.core.ClientOptions
-import com.vern_sdk.api.core.JsonValue
 import com.vern_sdk.api.core.RequestOptions
 import com.vern_sdk.api.core.checkRequired
+import com.vern_sdk.api.core.handlers.errorBodyHandler
 import com.vern_sdk.api.core.handlers.errorHandler
 import com.vern_sdk.api.core.handlers.jsonHandler
-import com.vern_sdk.api.core.handlers.withErrorHandler
 import com.vern_sdk.api.core.http.HttpMethod
 import com.vern_sdk.api.core.http.HttpRequest
+import com.vern_sdk.api.core.http.HttpResponse
 import com.vern_sdk.api.core.http.HttpResponse.Handler
 import com.vern_sdk.api.core.http.HttpResponseFor
 import com.vern_sdk.api.core.http.json
@@ -53,7 +53,8 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         RunServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
@@ -63,7 +64,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             )
 
         private val createHandler: Handler<RunCreateResponse> =
-            jsonHandler<RunCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<RunCreateResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: RunCreateParams,
@@ -81,7 +82,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {
@@ -95,7 +96,6 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
 
         private val retrieveHandler: Handler<RunRetrieveResponse> =
             jsonHandler<RunRetrieveResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun retrieve(
             params: RunRetrieveParams,
@@ -115,7 +115,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { retrieveHandler.handle(it) }
                             .also {

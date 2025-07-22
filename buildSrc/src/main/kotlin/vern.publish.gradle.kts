@@ -11,6 +11,7 @@ configure<PublishingExtension> {
             pom {
                 name.set("Vern API")
                 description.set("The Vern API allows you to run tasks and retrieve task execution results.")
+                url.set("https://www.github.com/vern-so/sdk-java")
 
                 licenses {
                     license {

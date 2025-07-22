@@ -51,7 +51,8 @@ import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
 import com.vern_sdk.api.models.runs.RunCreateParams;
 import com.vern_sdk.api.models.runs.RunCreateResponse;
 
-// Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+// Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+// Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
 VernClient client = VernOkHttpClient.fromEnv();
 
 RunCreateParams params = RunCreateParams.builder()
@@ -62,13 +63,14 @@ RunCreateResponse run = client.runs().create(params);
 
 ## Client configuration
 
-Configure the client using environment variables:
+Configure the client using system properties or environment variables:
 
 ```java
 import com.vern_sdk.api.client.VernClient;
 import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
 
-// Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+// Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+// Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
 VernClient client = VernOkHttpClient.fromEnv();
 ```
 
@@ -90,7 +92,8 @@ import com.vern_sdk.api.client.VernClient;
 import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
 
 VernClient client = VernOkHttpClient.builder()
-    // Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+    // Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+    Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
     .fromEnv()
     .apiKey("My API Key")
     .build();
@@ -98,10 +101,12 @@ VernClient client = VernOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter    | Environment variable | Required | Default value              |
-| --------- | -------------------- | -------- | -------------------------- |
-| `apiKey`  | `VERN_SDK_API_KEY`   | true     | -                          |
-| `baseUrl` | `VERN_BASE_URL`      | true     | `"https://vern.so/api/v1"` |
+| Setter    | System property  | Environment variable | Required | Default value              |
+| --------- | ---------------- | -------------------- | -------- | -------------------------- |
+| `apiKey`  | `vern.sdkApiKey` | `VERN_SDK_API_KEY`   | true     | -                          |
+| `baseUrl` | `vern.baseUrl`   | `VERN_BASE_URL`      | true     | `"https://vern.so/api/v1"` |
+
+System properties take precedence over environment variables.
 
 > [!TIP]
 > Don't create more than one client in the same application. Each client has a connection pool and
@@ -147,7 +152,8 @@ import com.vern_sdk.api.models.runs.RunCreateParams;
 import com.vern_sdk.api.models.runs.RunCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+// Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+// Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
 VernClient client = VernOkHttpClient.fromEnv();
 
 RunCreateParams params = RunCreateParams.builder()
@@ -165,7 +171,8 @@ import com.vern_sdk.api.models.runs.RunCreateParams;
 import com.vern_sdk.api.models.runs.RunCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+// Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+// Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
 VernClientAsync client = VernOkHttpClientAsync.fromEnv();
 
 RunCreateParams params = RunCreateParams.builder()

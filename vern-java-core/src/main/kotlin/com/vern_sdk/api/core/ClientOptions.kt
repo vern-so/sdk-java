@@ -220,8 +220,12 @@ private constructor(
         fun timeout(): Timeout = timeout
 
         fun fromEnv() = apply {
-            System.getenv("VERN_BASE_URL")?.let { baseUrl(it) }
-            System.getenv("VERN_SDK_API_KEY")?.let { apiKey(it) }
+            (System.getProperty("vern.baseUrl") ?: System.getenv("VERN_BASE_URL"))?.let {
+                baseUrl(it)
+            }
+            (System.getProperty("vern.sdkApiKey") ?: System.getenv("VERN_SDK_API_KEY"))?.let {
+                apiKey(it)
+            }
         }
 
         /**

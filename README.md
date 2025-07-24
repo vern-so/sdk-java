@@ -93,7 +93,7 @@ import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
 
 VernClient client = VernOkHttpClient.builder()
     // Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
-    Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+    // Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
     .fromEnv()
     .apiKey("My API Key")
     .build();

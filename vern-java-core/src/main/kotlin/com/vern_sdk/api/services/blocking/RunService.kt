@@ -29,7 +29,7 @@ interface RunService {
     /** Executes a task with the provided inputs */
     fun create(params: RunCreateParams): RunCreateResponse = create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: RunCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -38,30 +38,30 @@ interface RunService {
     /** Retrieves the details of a specific task run */
     fun retrieve(id: String): RunRetrieveResponse = retrieve(id, RunRetrieveParams.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         id: String,
         params: RunRetrieveParams = RunRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): RunRetrieveResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         id: String,
         params: RunRetrieveParams = RunRetrieveParams.none(),
     ): RunRetrieveResponse = retrieve(id, params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: RunRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): RunRetrieveResponse
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(params: RunRetrieveParams): RunRetrieveResponse =
         retrieve(params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(id: String, requestOptions: RequestOptions): RunRetrieveResponse =
         retrieve(id, RunRetrieveParams.none(), requestOptions)
 
@@ -83,7 +83,7 @@ interface RunService {
         fun create(params: RunCreateParams): HttpResponseFor<RunCreateResponse> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(
             params: RunCreateParams,
@@ -98,7 +98,7 @@ interface RunService {
         fun retrieve(id: String): HttpResponseFor<RunRetrieveResponse> =
             retrieve(id, RunRetrieveParams.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             id: String,
@@ -107,26 +107,26 @@ interface RunService {
         ): HttpResponseFor<RunRetrieveResponse> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             id: String,
             params: RunRetrieveParams = RunRetrieveParams.none(),
         ): HttpResponseFor<RunRetrieveResponse> = retrieve(id, params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: RunRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<RunRetrieveResponse>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(params: RunRetrieveParams): HttpResponseFor<RunRetrieveResponse> =
             retrieve(params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             id: String,

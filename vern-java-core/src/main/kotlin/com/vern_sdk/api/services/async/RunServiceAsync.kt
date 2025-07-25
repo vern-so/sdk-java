@@ -30,7 +30,7 @@ interface RunServiceAsync {
     fun create(params: RunCreateParams): CompletableFuture<RunCreateResponse> =
         create(params, RequestOptions.none())
 
-    /** @see [create] */
+    /** @see create */
     fun create(
         params: RunCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -40,7 +40,7 @@ interface RunServiceAsync {
     fun retrieve(id: String): CompletableFuture<RunRetrieveResponse> =
         retrieve(id, RunRetrieveParams.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         id: String,
         params: RunRetrieveParams = RunRetrieveParams.none(),
@@ -48,23 +48,23 @@ interface RunServiceAsync {
     ): CompletableFuture<RunRetrieveResponse> =
         retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         id: String,
         params: RunRetrieveParams = RunRetrieveParams.none(),
     ): CompletableFuture<RunRetrieveResponse> = retrieve(id, params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: RunRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<RunRetrieveResponse>
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(params: RunRetrieveParams): CompletableFuture<RunRetrieveResponse> =
         retrieve(params, RequestOptions.none())
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         id: String,
         requestOptions: RequestOptions,
@@ -88,7 +88,7 @@ interface RunServiceAsync {
         fun create(params: RunCreateParams): CompletableFuture<HttpResponseFor<RunCreateResponse>> =
             create(params, RequestOptions.none())
 
-        /** @see [create] */
+        /** @see create */
         fun create(
             params: RunCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -101,7 +101,7 @@ interface RunServiceAsync {
         fun retrieve(id: String): CompletableFuture<HttpResponseFor<RunRetrieveResponse>> =
             retrieve(id, RunRetrieveParams.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             id: String,
             params: RunRetrieveParams = RunRetrieveParams.none(),
@@ -109,26 +109,26 @@ interface RunServiceAsync {
         ): CompletableFuture<HttpResponseFor<RunRetrieveResponse>> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             id: String,
             params: RunRetrieveParams = RunRetrieveParams.none(),
         ): CompletableFuture<HttpResponseFor<RunRetrieveResponse>> =
             retrieve(id, params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             params: RunRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<RunRetrieveResponse>>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             params: RunRetrieveParams
         ): CompletableFuture<HttpResponseFor<RunRetrieveResponse>> =
             retrieve(params, RequestOptions.none())
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         fun retrieve(
             id: String,
             requestOptions: RequestOptions,

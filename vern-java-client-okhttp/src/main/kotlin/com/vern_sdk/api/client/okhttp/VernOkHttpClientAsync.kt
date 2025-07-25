@@ -8,6 +8,7 @@ import com.vern_sdk.api.client.VernClientAsyncImpl
 import com.vern_sdk.api.core.ClientOptions
 import com.vern_sdk.api.core.Timeout
 import com.vern_sdk.api.core.http.Headers
+import com.vern_sdk.api.core.http.HttpClient
 import com.vern_sdk.api.core.http.QueryParams
 import com.vern_sdk.api.core.jsonMapper
 import java.net.Proxy
@@ -19,13 +20,22 @@ import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * A class that allows building an instance of [VernClientAsync] with [OkHttpClient] as the
+ * underlying [HttpClient].
+ */
 class VernOkHttpClientAsync private constructor() {
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [VernOkHttpClientAsync]. */
+        /** Returns a mutable builder for constructing an instance of [VernClientAsync]. */
         @JvmStatic fun builder() = Builder()
 
+        /**
+         * Returns a client configured using system properties and environment variables.
+         *
+         * @see ClientOptions.Builder.fromEnv
+         */
         @JvmStatic fun fromEnv(): VernClientAsync = builder().fromEnv().build()
     }
 
@@ -102,19 +112,49 @@ class VernOkHttpClientAsync private constructor() {
             clientOptions.checkJacksonVersionCompatibility(checkJacksonVersionCompatibility)
         }
 
+        /**
+         * The Jackson JSON mapper to use for serializing and deserializing JSON.
+         *
+         * Defaults to [com.vern_sdk.api.core.jsonMapper]. The default is usually sufficient and
+         * rarely needs to be overridden.
+         */
         fun jsonMapper(jsonMapper: JsonMapper) = apply { clientOptions.jsonMapper(jsonMapper) }
 
+        /**
+         * The clock to use for operations that require timing, like retries.
+         *
+         * This is primarily useful for using a fake clock in tests.
+         *
+         * Defaults to [Clock.systemUTC].
+         */
         fun clock(clock: Clock) = apply { clientOptions.clock(clock) }
 
+        /**
+         * The base URL to use for every request.
+         *
+         * Defaults to the production environment: `https://vern.so/api/v1`.
+         */
         fun baseUrl(baseUrl: String?) = apply { clientOptions.baseUrl(baseUrl) }
 
         /** Alias for calling [Builder.baseUrl] with `baseUrl.orElse(null)`. */
         fun baseUrl(baseUrl: Optional<String>) = baseUrl(baseUrl.getOrNull())
 
+        /**
+         * Whether to call `validate` on every response before returning it.
+         *
+         * Defaults to false, which means the shape of the response will not be validated upfront.
+         * Instead, validation will only occur for the parts of the response that are accessed.
+         */
         fun responseValidation(responseValidation: Boolean) = apply {
             clientOptions.responseValidation(responseValidation)
         }
 
+        /**
+         * Sets the maximum time allowed for various parts of an HTTP call's lifecycle, excluding
+         * retries.
+         *
+         * Defaults to [Timeout.default].
+         */
         fun timeout(timeout: Timeout) = apply { clientOptions.timeout(timeout) }
 
         /**
@@ -126,6 +166,21 @@ class VernOkHttpClientAsync private constructor() {
          */
         fun timeout(timeout: Duration) = apply { clientOptions.timeout(timeout) }
 
+        /**
+         * The maximum number of times to retry failed requests, with a short exponential backoff
+         * between requests.
+         *
+         * Only the following error types are retried:
+         * - Connection errors (for example, due to a network connectivity problem)
+         * - 408 Request Timeout
+         * - 409 Conflict
+         * - 429 Rate Limit
+         * - 5xx Internal
+         *
+         * The API may also explicitly instruct the SDK to retry or not retry a request.
+         *
+         * Defaults to 2.
+         */
         fun maxRetries(maxRetries: Int) = apply { clientOptions.maxRetries(maxRetries) }
 
         fun apiKey(apiKey: String) = apply { clientOptions.apiKey(apiKey) }
@@ -210,6 +265,11 @@ class VernOkHttpClientAsync private constructor() {
             clientOptions.removeAllQueryParams(keys)
         }
 
+        /**
+         * Updates configuration using system properties and environment variables.
+         *
+         * @see ClientOptions.Builder.fromEnv
+         */
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
         /**

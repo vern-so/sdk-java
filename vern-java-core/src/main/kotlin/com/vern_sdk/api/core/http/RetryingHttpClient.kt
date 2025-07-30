@@ -3,6 +3,7 @@ package com.vern_sdk.api.core.http
 import com.vern_sdk.api.core.RequestOptions
 import com.vern_sdk.api.core.checkRequired
 import com.vern_sdk.api.errors.VernIoException
+import com.vern_sdk.api.errors.VernRetryableException
 import java.io.IOException
 import java.time.Clock
 import java.time.Duration
@@ -176,9 +177,10 @@ private constructor(
     }
 
     private fun shouldRetry(throwable: Throwable): Boolean =
-        // Only retry IOException and VernIoException, other exceptions are not intended to be
-        // retried.
-        throwable is IOException || throwable is VernIoException
+        // Only retry known retryable exceptions, other exceptions are not intended to be retried.
+        throwable is IOException ||
+            throwable is VernIoException ||
+            throwable is VernRetryableException
 
     private fun getRetryBackoffDuration(retries: Int, response: HttpResponse?): Duration {
         // About the Retry-After header:

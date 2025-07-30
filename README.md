@@ -231,6 +231,8 @@ The SDK throws custom unchecked exception types:
 
 - [`VernIoException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernIoException.kt): I/O networking errors.
 
+- [`VernRetryableException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernRetryableException.kt): Generic error indicating a failure that could be retried by the client.
+
 - [`VernInvalidDataException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
 - [`VernException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.

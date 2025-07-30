@@ -4,12 +4,10 @@ package com.vern_sdk.api.models.runs
 
 import com.vern_sdk.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class RunCreateParamsTest {
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun create() {
         RunCreateParams.builder()
@@ -25,7 +23,6 @@ internal class RunCreateParamsTest {
             .build()
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun body() {
         val params =
@@ -55,7 +52,6 @@ internal class RunCreateParamsTest {
         assertThat(body.url()).contains("https://example.com")
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun bodyWithoutOptionalFields() {
         val params = RunCreateParams.builder().taskId("task_123456").build()

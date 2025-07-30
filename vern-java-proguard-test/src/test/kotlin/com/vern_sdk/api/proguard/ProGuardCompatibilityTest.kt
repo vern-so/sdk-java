@@ -10,7 +10,6 @@ import com.vern_sdk.api.models.runs.RunCreateResponse
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class ProGuardCompatibilityTest {
@@ -42,7 +41,6 @@ internal class ProGuardCompatibilityTest {
         assertThat(client.runs()).isNotNull()
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun runCreateResponseRoundtrip() {
         val jsonMapper = jsonMapper()

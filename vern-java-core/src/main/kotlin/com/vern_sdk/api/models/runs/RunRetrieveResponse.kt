@@ -484,12 +484,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Inputs && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Inputs && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -586,12 +584,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Response && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Response && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -727,7 +723,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -740,12 +736,31 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is RunRetrieveResponse && id == other.id && completedAt == other.completedAt && createdAt == other.createdAt && inputs == other.inputs && response == other.response && startedAt == other.startedAt && status == other.status && task == other.task && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is RunRetrieveResponse &&
+            id == other.id &&
+            completedAt == other.completedAt &&
+            createdAt == other.createdAt &&
+            inputs == other.inputs &&
+            response == other.response &&
+            startedAt == other.startedAt &&
+            status == other.status &&
+            task == other.task &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, completedAt, createdAt, inputs, response, startedAt, status, task, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            completedAt,
+            createdAt,
+            inputs,
+            response,
+            startedAt,
+            status,
+            task,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

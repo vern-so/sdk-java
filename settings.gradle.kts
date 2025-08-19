@@ -1,7 +1,14 @@
 rootProject.name = "vern-java-root"
 
-include("vern-java")
-include("vern-java-client-okhttp")
-include("vern-java-core")
-include("vern-java-proguard-test")
-include("vern-java-example")
+val projectNames = rootDir.listFiles()
+    ?.asSequence()
+    .orEmpty()
+    .filter { file ->
+        file.isDirectory &&
+        file.name.startsWith("vern-java") &&
+        file.listFiles()?.asSequence().orEmpty().any { it.name == "build.gradle.kts" }
+    }
+    .map { it.name }
+    .toList()
+println("projects: $projectNames")
+projectNames.forEach { include(it) }

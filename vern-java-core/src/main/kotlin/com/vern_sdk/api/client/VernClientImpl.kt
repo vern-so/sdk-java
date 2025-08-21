@@ -36,7 +36,7 @@ class VernClientImpl(private val clientOptions: ClientOptions) : VernClient {
 
     override fun runs(): RunService = runs
 
-    override fun close() = clientOptions.httpClient.close()
+    override fun close() = clientOptions.close()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         VernClient.WithRawResponse {

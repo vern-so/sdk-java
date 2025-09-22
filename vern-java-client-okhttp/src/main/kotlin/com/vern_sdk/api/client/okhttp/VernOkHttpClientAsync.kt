@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.vern_sdk.api.client.VernClientAsync
 import com.vern_sdk.api.client.VernClientAsyncImpl
 import com.vern_sdk.api.core.ClientOptions
+import com.vern_sdk.api.core.Sleeper
 import com.vern_sdk.api.core.Timeout
 import com.vern_sdk.api.core.http.Headers
 import com.vern_sdk.api.core.http.HttpClient
@@ -119,6 +120,17 @@ class VernOkHttpClientAsync private constructor() {
          * rarely needs to be overridden.
          */
         fun jsonMapper(jsonMapper: JsonMapper) = apply { clientOptions.jsonMapper(jsonMapper) }
+
+        /**
+         * The interface to use for delaying execution, like during retries.
+         *
+         * This is primarily useful for using fake delays in tests.
+         *
+         * Defaults to real execution delays.
+         *
+         * This class takes ownership of the sleeper and closes it when closed.
+         */
+        fun sleeper(sleeper: Sleeper) = apply { clientOptions.sleeper(sleeper) }
 
         /**
          * The clock to use for operations that require timing, like retries.

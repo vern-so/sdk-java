@@ -2,25 +2,18 @@
 
 package com.vern_sdk.api.services.async
 
-import com.vern_sdk.api.TestServerExtension
 import com.vern_sdk.api.client.okhttp.VernOkHttpClientAsync
 import com.vern_sdk.api.core.JsonValue
 import com.vern_sdk.api.models.runs.RunCreateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class RunServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun create() {
-        val client =
-            VernOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = VernOkHttpClientAsync.builder().apiKey("My API Key").build()
         val runServiceAsync = client.runs()
 
         val runFuture =
@@ -42,14 +35,10 @@ internal class RunServiceAsyncTest {
         run.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            VernOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = VernOkHttpClientAsync.builder().apiKey("My API Key").build()
         val runServiceAsync = client.runs()
 
         val runFuture = runServiceAsync.retrieve("id")

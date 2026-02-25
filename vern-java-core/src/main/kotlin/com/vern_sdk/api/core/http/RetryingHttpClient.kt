@@ -1,3 +1,5 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package com.vern_sdk.api.core.http
 
 import com.vern_sdk.api.core.DefaultSleeper

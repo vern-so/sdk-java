@@ -239,8 +239,6 @@ The SDK throws custom unchecked exception types:
 
 ## Logging
 
-The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
-
 Enable logging by setting the `VERN_LOG` environment variable to `info`:
 
 ```sh
@@ -251,6 +249,19 @@ Or to `debug` for more verbose logging:
 
 ```sh
 export VERN_LOG=debug
+```
+
+Or configure the client manually using the `logLevel` method:
+
+```java
+import com.vern_sdk.api.client.VernClient;
+import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
+import com.vern_sdk.api.core.LogLevel;
+
+VernClient client = VernOkHttpClient.builder()
+    .fromEnv()
+    .logLevel(LogLevel.INFO)
+    .build();
 ```
 
 ## ProGuard and R8

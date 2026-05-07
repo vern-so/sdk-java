@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.vern_sdk.api.client.VernClientAsync
 import com.vern_sdk.api.client.VernClientAsyncImpl
 import com.vern_sdk.api.core.ClientOptions
+import com.vern_sdk.api.core.LogLevel
 import com.vern_sdk.api.core.Sleeper
 import com.vern_sdk.api.core.Timeout
 import com.vern_sdk.api.core.http.Headers
@@ -276,6 +277,15 @@ class VernOkHttpClientAsync private constructor() {
          * Defaults to 2.
          */
         fun maxRetries(maxRetries: Int) = apply { clientOptions.maxRetries(maxRetries) }
+
+        /**
+         * The level at which to log request and response information.
+         *
+         * [fromEnv] will set the level from environment variables. See [LogLevel.fromEnv].
+         *
+         * Defaults to [LogLevel.fromEnv].
+         */
+        fun logLevel(logLevel: LogLevel) = apply { clientOptions.logLevel(logLevel) }
 
         fun apiKey(apiKey: String) = apply { clientOptions.apiKey(apiKey) }
 

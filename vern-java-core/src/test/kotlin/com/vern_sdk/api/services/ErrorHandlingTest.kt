@@ -26,7 +26,6 @@ import com.vern_sdk.api.models.runs.RunCreateParams
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.parallel.ResourceLock
@@ -59,7 +58,6 @@ internal class ErrorHandlingTest {
                 .build()
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
     @Test
     fun runsCreate400() {
         val runService = client.runs()
@@ -92,7 +90,38 @@ internal class ErrorHandlingTest {
         assertThat(e.body()).isEqualTo(ERROR_JSON)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun runsCreate400WithRawResponse() {
+        val runService = client.runs().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(400).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<BadRequestException> {
+                runService.create(
+                    RunCreateParams.builder()
+                        .taskId("task_123456")
+                        .inputs(
+                            RunCreateParams.Inputs.builder()
+                                .putAdditionalProperty("prompt", JsonValue.from("bar"))
+                                .putAdditionalProperty("text", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .profileId("profileId")
+                        .url("https://example.com")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(400)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
     @Test
     fun runsCreate401() {
         val runService = client.runs()
@@ -125,7 +154,38 @@ internal class ErrorHandlingTest {
         assertThat(e.body()).isEqualTo(ERROR_JSON)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun runsCreate401WithRawResponse() {
+        val runService = client.runs().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(401).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnauthorizedException> {
+                runService.create(
+                    RunCreateParams.builder()
+                        .taskId("task_123456")
+                        .inputs(
+                            RunCreateParams.Inputs.builder()
+                                .putAdditionalProperty("prompt", JsonValue.from("bar"))
+                                .putAdditionalProperty("text", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .profileId("profileId")
+                        .url("https://example.com")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(401)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
     @Test
     fun runsCreate403() {
         val runService = client.runs()
@@ -158,7 +218,38 @@ internal class ErrorHandlingTest {
         assertThat(e.body()).isEqualTo(ERROR_JSON)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun runsCreate403WithRawResponse() {
+        val runService = client.runs().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(403).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<PermissionDeniedException> {
+                runService.create(
+                    RunCreateParams.builder()
+                        .taskId("task_123456")
+                        .inputs(
+                            RunCreateParams.Inputs.builder()
+                                .putAdditionalProperty("prompt", JsonValue.from("bar"))
+                                .putAdditionalProperty("text", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .profileId("profileId")
+                        .url("https://example.com")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(403)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
     @Test
     fun runsCreate404() {
         val runService = client.runs()
@@ -191,7 +282,38 @@ internal class ErrorHandlingTest {
         assertThat(e.body()).isEqualTo(ERROR_JSON)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun runsCreate404WithRawResponse() {
+        val runService = client.runs().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(404).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<NotFoundException> {
+                runService.create(
+                    RunCreateParams.builder()
+                        .taskId("task_123456")
+                        .inputs(
+                            RunCreateParams.Inputs.builder()
+                                .putAdditionalProperty("prompt", JsonValue.from("bar"))
+                                .putAdditionalProperty("text", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .profileId("profileId")
+                        .url("https://example.com")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(404)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
     @Test
     fun runsCreate422() {
         val runService = client.runs()
@@ -224,7 +346,38 @@ internal class ErrorHandlingTest {
         assertThat(e.body()).isEqualTo(ERROR_JSON)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun runsCreate422WithRawResponse() {
+        val runService = client.runs().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(422).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnprocessableEntityException> {
+                runService.create(
+                    RunCreateParams.builder()
+                        .taskId("task_123456")
+                        .inputs(
+                            RunCreateParams.Inputs.builder()
+                                .putAdditionalProperty("prompt", JsonValue.from("bar"))
+                                .putAdditionalProperty("text", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .profileId("profileId")
+                        .url("https://example.com")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(422)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
     @Test
     fun runsCreate429() {
         val runService = client.runs()
@@ -257,7 +410,38 @@ internal class ErrorHandlingTest {
         assertThat(e.body()).isEqualTo(ERROR_JSON)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun runsCreate429WithRawResponse() {
+        val runService = client.runs().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(429).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<RateLimitException> {
+                runService.create(
+                    RunCreateParams.builder()
+                        .taskId("task_123456")
+                        .inputs(
+                            RunCreateParams.Inputs.builder()
+                                .putAdditionalProperty("prompt", JsonValue.from("bar"))
+                                .putAdditionalProperty("text", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .profileId("profileId")
+                        .url("https://example.com")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(429)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
     @Test
     fun runsCreate500() {
         val runService = client.runs()
@@ -290,7 +474,38 @@ internal class ErrorHandlingTest {
         assertThat(e.body()).isEqualTo(ERROR_JSON)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun runsCreate500WithRawResponse() {
+        val runService = client.runs().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(500).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<InternalServerException> {
+                runService.create(
+                    RunCreateParams.builder()
+                        .taskId("task_123456")
+                        .inputs(
+                            RunCreateParams.Inputs.builder()
+                                .putAdditionalProperty("prompt", JsonValue.from("bar"))
+                                .putAdditionalProperty("text", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .profileId("profileId")
+                        .url("https://example.com")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(500)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
     @Test
     fun runsCreate999() {
         val runService = client.runs()
@@ -323,7 +538,38 @@ internal class ErrorHandlingTest {
         assertThat(e.body()).isEqualTo(ERROR_JSON)
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Test
+    fun runsCreate999WithRawResponse() {
+        val runService = client.runs().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(999).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnexpectedStatusCodeException> {
+                runService.create(
+                    RunCreateParams.builder()
+                        .taskId("task_123456")
+                        .inputs(
+                            RunCreateParams.Inputs.builder()
+                                .putAdditionalProperty("prompt", JsonValue.from("bar"))
+                                .putAdditionalProperty("text", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .profileId("profileId")
+                        .url("https://example.com")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(999)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
     @Test
     fun runsCreateInvalidJsonBody() {
         val runService = client.runs()

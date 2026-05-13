@@ -1,20 +1,30 @@
 # Vern Java API Library
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.vern_sdk.api/vern-java)](https://central.sonatype.com/artifact/com.vern_sdk.api/vern-java/0.0.1-alpha.0)
-[![javadoc](https://javadoc.io/badge2/com.vern_sdk.api/vern-java/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/com.vern_sdk.api/vern-java/0.0.1-alpha.0)
+<!-- x-release-please-start-version -->
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.vern_sdk.api/vern-java)](https://central.sonatype.com/artifact/com.vern_sdk.api/vern-java/0.1.0-alpha.1)
+[![javadoc](https://javadoc.io/badge2/com.vern_sdk.api/vern-java/0.1.0-alpha.1/javadoc.svg)](https://javadoc.io/doc/com.vern_sdk.api/vern-java/0.1.0-alpha.1)
+
+<!-- x-release-please-end -->
 
 The Vern Java SDK provides convenient access to the Vern REST API from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.vern_sdk.api/vern-java/0.0.1-alpha.0).
+<!-- x-release-please-start-version -->
+
+Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.vern_sdk.api/vern-java/0.1.0-alpha.1).
+
+<!-- x-release-please-end -->
 
 ## Installation
+
+<!-- x-release-please-start-version -->
 
 ### Gradle
 
 ```kotlin
-implementation("com.vern_sdk.api:vern-java:0.0.1-alpha.0")
+implementation("com.vern_sdk.api:vern-java:0.1.0-alpha.1")
 ```
 
 ### Maven
@@ -23,9 +33,11 @@ implementation("com.vern_sdk.api:vern-java:0.0.1-alpha.0")
 <dependency>
   <groupId>com.vern_sdk.api</groupId>
   <artifactId>vern-java</artifactId>
-  <version>0.0.1-alpha.0</version>
+  <version>0.1.0-alpha.1</version>
 </dependency>
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -39,7 +51,8 @@ import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
 import com.vern_sdk.api.models.runs.RunCreateParams;
 import com.vern_sdk.api.models.runs.RunCreateResponse;
 
-// Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+// Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+// Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
 VernClient client = VernOkHttpClient.fromEnv();
 
 RunCreateParams params = RunCreateParams.builder()
@@ -50,13 +63,14 @@ RunCreateResponse run = client.runs().create(params);
 
 ## Client configuration
 
-Configure the client using environment variables:
+Configure the client using system properties or environment variables:
 
 ```java
 import com.vern_sdk.api.client.VernClient;
 import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
 
-// Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+// Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+// Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
 VernClient client = VernOkHttpClient.fromEnv();
 ```
 
@@ -78,7 +92,8 @@ import com.vern_sdk.api.client.VernClient;
 import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
 
 VernClient client = VernOkHttpClient.builder()
-    // Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+    // Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+    // Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
     .fromEnv()
     .apiKey("My API Key")
     .build();
@@ -86,14 +101,31 @@ VernClient client = VernOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter    | Environment variable | Required | Default value              |
-| --------- | -------------------- | -------- | -------------------------- |
-| `apiKey`  | `VERN_SDK_API_KEY`   | true     | -                          |
-| `baseUrl` | `VERN_BASE_URL`      | true     | `"https://vern.so/api/v1"` |
+| Setter    | System property  | Environment variable | Required | Default value              |
+| --------- | ---------------- | -------------------- | -------- | -------------------------- |
+| `apiKey`  | `vern.sdkApiKey` | `VERN_SDK_API_KEY`   | true     | -                          |
+| `baseUrl` | `vern.baseUrl`   | `VERN_BASE_URL`      | true     | `"https://vern.so/api/v1"` |
+
+System properties take precedence over environment variables.
 
 > [!TIP]
 > Don't create more than one client in the same application. Each client has a connection pool and
 > thread pools, which are more efficient to share between requests.
+
+### Modifying configuration
+
+To temporarily use a modified client configuration, while reusing the same connection and thread pools, call `withOptions()` on any client or service:
+
+```java
+import com.vern_sdk.api.client.VernClient;
+
+VernClient clientWithOptions = client.withOptions(optionsBuilder -> {
+    optionsBuilder.baseUrl("https://example.com");
+    optionsBuilder.maxRetries(42);
+});
+```
+
+The `withOptions()` method does not affect the original client or service.
 
 ## Requests and responses
 
@@ -120,7 +152,8 @@ import com.vern_sdk.api.models.runs.RunCreateParams;
 import com.vern_sdk.api.models.runs.RunCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+// Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+// Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
 VernClient client = VernOkHttpClient.fromEnv();
 
 RunCreateParams params = RunCreateParams.builder()
@@ -138,7 +171,8 @@ import com.vern_sdk.api.models.runs.RunCreateParams;
 import com.vern_sdk.api.models.runs.RunCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
+// Configures using the `vern.sdkApiKey` and `vern.baseUrl` system properties
+// Or configures using the `VERN_SDK_API_KEY` and `VERN_BASE_URL` environment variables
 VernClientAsync client = VernOkHttpClientAsync.fromEnv();
 
 RunCreateParams params = RunCreateParams.builder()
@@ -197,25 +231,44 @@ The SDK throws custom unchecked exception types:
 
 - [`VernIoException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernIoException.kt): I/O networking errors.
 
+- [`VernRetryableException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernRetryableException.kt): Generic error indicating a failure that could be retried by the client.
+
 - [`VernInvalidDataException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
 - [`VernException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Logging
 
-The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
-
 Enable logging by setting the `VERN_LOG` environment variable to `info`:
 
 ```sh
-$ export VERN_LOG=info
+export VERN_LOG=info
 ```
 
 Or to `debug` for more verbose logging:
 
 ```sh
-$ export VERN_LOG=debug
+export VERN_LOG=debug
 ```
+
+Or configure the client manually using the `logLevel` method:
+
+```java
+import com.vern_sdk.api.client.VernClient;
+import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
+import com.vern_sdk.api.core.LogLevel;
+
+VernClient client = VernOkHttpClient.builder()
+    .fromEnv()
+    .logLevel(LogLevel.INFO)
+    .build();
+```
+
+## ProGuard and R8
+
+Although the SDK uses reflection, it is still usable with [ProGuard](https://github.com/Guardsquare/proguard) and [R8](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization) because `vern-java-core` is published with a [configuration file](vern-java-core/src/main/resources/META-INF/proguard/vern-java-core.pro) containing [keep rules](https://www.guardsquare.com/manual/configuration/usage).
+
+ProGuard and R8 should automatically detect and use the published rules, but you can also manually copy the keep rules if necessary.
 
 ## Jackson
 
@@ -228,11 +281,13 @@ If the SDK threw an exception, but you're _certain_ the version is compatible, t
 > [!CAUTION]
 > We make no guarantee that the SDK works correctly when the Jackson version check is disabled.
 
+Also note that there are bugs in older Jackson versions that can affect the SDK. We don't work around all Jackson bugs ([example](https://github.com/FasterXML/jackson-databind/issues/3240)) and expect users to upgrade Jackson for those instead.
+
 ## Network options
 
 ### Retries
 
-The SDK automatically retries 2 times by default, with a short exponential backoff.
+The SDK automatically retries 2 times by default, with a short exponential backoff between requests.
 
 Only the following error types are retried:
 
@@ -242,7 +297,7 @@ Only the following error types are retried:
 - 429 Rate Limit
 - 5xx Internal
 
-The API may also explicitly instruct the SDK to retry or not retry a response.
+The API may also explicitly instruct the SDK to retry or not retry a request.
 
 To set a custom number of retries, configure the client using the `maxRetries` method:
 
@@ -300,6 +355,61 @@ VernClient client = VernOkHttpClient.builder()
         "https://example.com", 8080
       )
     ))
+    .build();
+```
+
+If the proxy responds with `407 Proxy Authentication Required`, supply credentials by also configuring `proxyAuthenticator`:
+
+```java
+import com.vern_sdk.api.client.VernClient;
+import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
+import com.vern_sdk.api.core.http.ProxyAuthenticator;
+
+VernClient client = VernOkHttpClient.builder()
+    .fromEnv()
+    .proxy(...)
+    // Or a custom implementation of `ProxyAuthenticator`.
+    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))
+    .build();
+```
+
+### Connection pooling
+
+To customize the underlying OkHttp connection pool, configure the client using the `maxIdleConnections` and `keepAliveDuration` methods:
+
+```java
+import com.vern_sdk.api.client.VernClient;
+import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
+import java.time.Duration;
+
+VernClient client = VernOkHttpClient.builder()
+    .fromEnv()
+    // If `maxIdleConnections` is set, then `keepAliveDuration` must be set, and vice versa.
+    .maxIdleConnections(10)
+    .keepAliveDuration(Duration.ofMinutes(2))
+    .build();
+```
+
+If both options are unset, OkHttp's default connection pool settings are used.
+
+### HTTPS
+
+> [!NOTE]
+> Most applications should not call these methods, and instead use the system defaults. The defaults include
+> special optimizations that can be lost if the implementations are modified.
+
+To configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`, `trustManager`, and `hostnameVerifier` methods:
+
+```java
+import com.vern_sdk.api.client.VernClient;
+import com.vern_sdk.api.client.okhttp.VernOkHttpClient;
+
+VernClient client = VernOkHttpClient.builder()
+    .fromEnv()
+    // If `sslSocketFactory` is set, then `trustManager` must be set, and vice versa.
+    .sslSocketFactory(yourSSLSocketFactory)
+    .trustManager(yourTrustManager)
+    .hostnameVerifier(yourHostnameVerifier)
     .build();
 ```
 
@@ -483,7 +593,9 @@ In rare cases, the API may return a response that doesn't match the expected typ
 
 By default, the SDK will not throw an exception in this case. It will throw [`VernInvalidDataException`](vern-java-core/src/main/kotlin/com/vern_sdk/api/errors/VernInvalidDataException.kt) only if you directly access the property.
 
-If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
+Validating the response is _not_ forwards compatible with new types from the API for existing fields.
+
+If you would still prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
 import com.vern_sdk.api.models.runs.RunCreateResponse;
@@ -551,4 +663,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/vern-sdk-java/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/vern-so/sdk-java/issues) with questions, bugs, or suggestions.

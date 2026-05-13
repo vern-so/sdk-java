@@ -20,6 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class RunRetrieveResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val completedAt: JsonField<OffsetDateTime>,
@@ -354,6 +355,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws VernInvalidDataException if any value type in this object doesn't match its expected
+     *   type.
+     */
     fun validate(): RunRetrieveResponse = apply {
         if (validated) {
             return@apply
@@ -453,6 +462,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws VernInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Inputs = apply {
             if (validated) {
                 return@apply
@@ -484,12 +502,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Inputs && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Inputs && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -555,6 +571,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws VernInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Response = apply {
             if (validated) {
                 return@apply
@@ -586,12 +611,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Response && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Response && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -697,6 +720,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws VernInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Status = apply {
             if (validated) {
                 return@apply
@@ -727,7 +759,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -740,12 +772,31 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is RunRetrieveResponse && id == other.id && completedAt == other.completedAt && createdAt == other.createdAt && inputs == other.inputs && response == other.response && startedAt == other.startedAt && status == other.status && task == other.task && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is RunRetrieveResponse &&
+            id == other.id &&
+            completedAt == other.completedAt &&
+            createdAt == other.createdAt &&
+            inputs == other.inputs &&
+            response == other.response &&
+            startedAt == other.startedAt &&
+            status == other.status &&
+            task == other.task &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, completedAt, createdAt, inputs, response, startedAt, status, task, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            completedAt,
+            createdAt,
+            inputs,
+            response,
+            startedAt,
+            status,
+            task,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

@@ -11,6 +11,7 @@ configure<PublishingExtension> {
             pom {
                 name.set("Vern API")
                 description.set("The Vern API allows you to run tasks and retrieve task execution results.")
+                url.set("https://www.github.com/vern-so/sdk-java")
 
                 licenses {
                     license {
@@ -25,9 +26,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/vern-sdk-java.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/vern-sdk-java.git")
-                    url.set("https://github.com/stainless-sdks/vern-sdk-java")
+                    connection.set("scm:git:git://github.com/vern-so/sdk-java.git")
+                    developerConnection.set("scm:git:git://github.com/vern-so/sdk-java.git")
+                    url.set("https://github.com/vern-so/sdk-java")
                 }
 
                 versionMapping {
@@ -35,6 +36,14 @@ configure<PublishingExtension> {
                         fromResolutionResult()
                     }
                 }
+            }
+        }
+    }
+    repositories {
+        if (project.hasProperty("publishLocal")) {
+            maven {
+                name = "LocalFileSystem"
+                url = uri("${rootProject.layout.buildDirectory.get()}/local-maven-repo")
             }
         }
     }

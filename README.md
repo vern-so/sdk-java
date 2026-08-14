@@ -3,7 +3,7 @@
 <!-- x-release-please-start-version -->
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.vern_sdk.api/vern-java)](https://central.sonatype.com/artifact/com.vern_sdk.api/vern-java/0.0.1-alpha.0)
-[![javadoc](https://javadoc.io/badge2/com.vern_sdk.api/vern-java/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/com.vern_sdk.api/vern-java/0.0.1-alpha.0)
+[![javadoc](https://javadoc.io/badge2/com.vern_sdk.api/vern-java/javadoc.svg)](https://javadoc.io/doc/com.vern_sdk.api/vern-java/0.0.1-alpha.0)
 
 <!-- x-release-please-end -->
 

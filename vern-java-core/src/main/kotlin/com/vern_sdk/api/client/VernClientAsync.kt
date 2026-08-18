@@ -2,7 +2,9 @@
 
 package com.vern_sdk.api.client
 
+import com.vern_sdk.api.core.ClientOptions
 import com.vern_sdk.api.services.async.RunServiceAsync
+import java.util.function.Consumer
 
 /**
  * A client for interacting with the Vern REST API asynchronously. You can also switch to
@@ -33,6 +35,13 @@ interface VernClientAsync {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): VernClientAsync
+
     fun runs(): RunServiceAsync
 
     /**
@@ -50,6 +59,13 @@ interface VernClientAsync {
 
     /** A view of [VernClientAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): VernClientAsync.WithRawResponse
 
         fun runs(): RunServiceAsync.WithRawResponse
     }

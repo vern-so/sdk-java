@@ -3,14 +3,14 @@
 package com.vern_sdk.api.services.async
 
 import com.vern_sdk.api.core.ClientOptions
-import com.vern_sdk.api.core.JsonValue
 import com.vern_sdk.api.core.RequestOptions
 import com.vern_sdk.api.core.checkRequired
+import com.vern_sdk.api.core.handlers.errorBodyHandler
 import com.vern_sdk.api.core.handlers.errorHandler
 import com.vern_sdk.api.core.handlers.jsonHandler
-import com.vern_sdk.api.core.handlers.withErrorHandler
 import com.vern_sdk.api.core.http.HttpMethod
 import com.vern_sdk.api.core.http.HttpRequest
+import com.vern_sdk.api.core.http.HttpResponse
 import com.vern_sdk.api.core.http.HttpResponse.Handler
 import com.vern_sdk.api.core.http.HttpResponseFor
 import com.vern_sdk.api.core.http.json
@@ -21,6 +21,7 @@ import com.vern_sdk.api.models.runs.RunCreateResponse
 import com.vern_sdk.api.models.runs.RunRetrieveParams
 import com.vern_sdk.api.models.runs.RunRetrieveResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class RunServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,6 +32,9 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
     }
 
     override fun withRawResponse(): RunServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RunServiceAsync =
+        RunServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: RunCreateParams,
@@ -49,10 +53,18 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         RunServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): RunServiceAsync.WithRawResponse =
+            RunServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<RunCreateResponse> =
-            jsonHandler<RunCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<RunCreateResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: RunCreateParams,
@@ -61,6 +73,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("runs")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -69,7 +82,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { createHandler.handle(it) }
                             .also {
@@ -83,7 +96,6 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
 
         private val retrieveHandler: Handler<RunRetrieveResponse> =
             jsonHandler<RunRetrieveResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun retrieve(
             params: RunRetrieveParams,
@@ -95,6 +107,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("runs", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -102,7 +115,7 @@ class RunServiceAsyncImpl internal constructor(private val clientOptions: Client
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable {
+                    errorHandler.handle(response).parseable {
                         response
                             .use { retrieveHandler.handle(it) }
                             .also {

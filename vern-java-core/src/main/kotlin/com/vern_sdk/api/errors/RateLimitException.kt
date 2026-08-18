@@ -5,12 +5,16 @@ package com.vern_sdk.api.errors
 import com.vern_sdk.api.core.JsonValue
 import com.vern_sdk.api.core.checkRequired
 import com.vern_sdk.api.core.http.Headers
+import com.vern_sdk.api.core.jsonMapper
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class RateLimitException
 private constructor(private val headers: Headers, private val body: JsonValue, cause: Throwable?) :
-    VernServiceException("429: $body", cause) {
+    VernServiceException(
+        "429: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
+        cause,
+    ) {
 
     override fun statusCode(): Int = 429
 

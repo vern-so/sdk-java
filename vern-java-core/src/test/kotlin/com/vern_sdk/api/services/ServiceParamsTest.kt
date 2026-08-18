@@ -36,7 +36,7 @@ internal class ServiceParamsTest {
                 .build()
     }
 
-    @Disabled("skipped: tests are disabled for the time being")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun create() {
         val runService = client.runs()

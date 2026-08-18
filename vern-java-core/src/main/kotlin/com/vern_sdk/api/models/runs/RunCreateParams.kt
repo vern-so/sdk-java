@@ -91,8 +91,10 @@ private constructor(
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
+    /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
+    /** Additional query param to send with the request. */
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
@@ -321,6 +323,7 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val taskId: JsonField<String>,
         private val inputs: JsonField<Inputs>,
@@ -533,6 +536,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws VernInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Body = apply {
             if (validated) {
                 return@apply
@@ -571,12 +583,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && taskId == other.taskId && inputs == other.inputs && profileId == other.profileId && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                taskId == other.taskId &&
+                inputs == other.inputs &&
+                profileId == other.profileId &&
+                url == other.url &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(taskId, inputs, profileId, url, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(taskId, inputs, profileId, url, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -643,6 +660,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws VernInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Inputs = apply {
             if (validated) {
                 return@apply
@@ -674,12 +700,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Inputs && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Inputs && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -691,10 +715,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is RunCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is RunCreateParams &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "RunCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

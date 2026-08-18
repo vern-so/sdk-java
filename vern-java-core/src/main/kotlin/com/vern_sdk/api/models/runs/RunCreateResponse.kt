@@ -19,6 +19,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class RunCreateResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val inputs: JsonField<Inputs>,
@@ -178,6 +179,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws VernInvalidDataException if any value type in this object doesn't match its expected
+     *   type.
+     */
     fun validate(): RunCreateResponse = apply {
         if (validated) {
             return@apply
@@ -267,6 +276,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws VernInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Inputs = apply {
             if (validated) {
                 return@apply
@@ -298,12 +316,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Inputs && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Inputs && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -315,12 +331,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is RunCreateResponse && id == other.id && inputs == other.inputs && queuedAt == other.queuedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is RunCreateResponse &&
+            id == other.id &&
+            inputs == other.inputs &&
+            queuedAt == other.queuedAt &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(id, inputs, queuedAt, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
